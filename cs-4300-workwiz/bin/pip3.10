@@ -1,4 +1,4 @@
-#!/Users/sahilhosalli/4300/workwiz/WorkWiz/workwiz/bin/python3.10
+#!/Users/sahilhosalli/4300/workwiz/WorkWiz/cs-4300-workwiz/bin/python3.10
 # -*- coding: utf-8 -*-
 import re
 import sys
