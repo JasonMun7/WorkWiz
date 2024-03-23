@@ -28,9 +28,9 @@
 
         function answerBoxTemplate(title,titleDesc,rating){
             return `<div class=''>
-                <h3 class='episode-title'>${title}</h3>
-                <p class='episode-desc'>${titleDesc}</p>
-                <p class='episode-rating'>IMDB Rating: ${rating}</p>
+                <h3 class='job-title'>Job Title: ${title}</h3>
+                <p class='job-desc'>Description: ${titleDesc}</p>
+                <p class='client-average-rating'>Client Average Rating: ${rating}</p>
             </div>`
         }
 
@@ -44,9 +44,9 @@
             fetch("/jobs?" + new URLSearchParams({ title: document.getElementById("filter-text-val").value }).toString())
             .then((response) => response.json())
             .then((data) => data.forEach(row => {
-                
+         
                 let tempDiv = document.createElement("div")
-                tempDiv.innerHTML = answerBoxTemplate(row.job_title,row.job_description,row.tags)
+                tempDiv.innerHTML = answerBoxTemplate(row.job_title,row.job_description,row.client_average_rating)
                 document.getElementById("answer-box").appendChild(tempDiv)
             }));
 
