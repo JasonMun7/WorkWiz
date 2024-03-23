@@ -8,18 +8,16 @@
     <div class="full-body-container">
         <div class="top-text">
             <div class="google-colors">
-                <h1 id="google-4">W</h1>
-                <h1 id="google-3">o</h1>
-                <h1 id="google-0-1">r</h1>
-                <h1 id="google-0-2">k</h1>
-                <h1 id="google-4">W</h1>
-                <h1 id="google-3">i</h1>
-                <h1 id="google-0-1">z</h1>
+                <h1 id="google-0-2">Work Wiz</h1>
             </div>
-            <div class="input-box" onclick="sendFocus()">
-                <img src="{{ url_for('static', filename='images/mag.png') }}" />
-                <input placeholder="I want to make..." id="filter-text-val" onkeyup="filterText()">
-            </div>
+            <div class="title-description">Instantly discover the necessary skills required for your project</div>
+            <label class="input-container closed " onclick="sendFocus()">
+                <div class="shadow"></div>
+                <div class="center">
+                    <input id="filter-text-val" type="text" class="input" placeholder="Search through numerous jobs/freelancers" onkeyup="filterText()">
+                </div>
+                <div class="sticks"></div>
+            </label>
         </div>
         <div id="answer-box">
 
@@ -46,7 +44,7 @@
             fetch("/jobs?" + new URLSearchParams({ title: document.getElementById("filter-text-val").value }).toString())
             .then((response) => response.json())
             .then((data) => data.forEach(row => {
-                
+         
                 let tempDiv = document.createElement("div")
                 tempDiv.innerHTML = answerBoxTemplate(row.job_title,row.job_description,row.client_average_rating)
                 document.getElementById("answer-box").appendChild(tempDiv)
