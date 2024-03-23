@@ -5,39 +5,51 @@ import numpy
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-def cosine_sim(query : str, doc : str):
-  vectorizer = TfidfVectorizer()
+#precompute the inverted index, save in a global variable
+import os
+import pandas as pd
+import json
+import numpy as np
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+import loader
 
-  # constructs tf idf matrix between query and doc 
-  tfidf_mat = vectorizer.fit_transform([query, doc])
+# Load or create the TF-IDF matrix for the documents
+# This should be done only once, or whenever the documents change
+import pickle
 
-  # tf-idf of q 
-  q = tfidf_mat[0]
+def load_or_create_tfidf_matrix():
+    try:
+        with open("tfidf_matrix.pickle", "rb") as f:
+            tfidf_matrix, vectorizer = pickle.load(f)
+    except FileNotFoundError:
+        vectorizer = TfidfVectorizer()
+        corpus = []
+        with open('data/freelancer.json', 'r') as jsonfile:
+          data = json.load(jsonfile)
+          jobs_df = pd.DataFrame(data['jobs'])
+        for jd in jobs_df['job_description']:
+            corpus.append(jd)
+        tfidf_matrix = vectorizer.fit_transform(corpus)
+        with open("tfidf_matrix.pickle", "wb") as f:
+            pickle.dump((tfidf_matrix, vectorizer), f)
+    return tfidf_matrix, vectorizer
 
-  # tf-idf of doc
-  doc = tfidf_mat[1]
+# Precompute the inverted index, save in a global variable
+tfidf_matrix, vectorizer = load_or_create_tfidf_matrix()
 
-  #cosine sim
-  sim = cosine_similarity(q, doc)
+def cosine_sim(query: str):
+    # No need to create a new TfidfVectorizer, just use the precomputed one
+    q = vectorizer.transform([query])
+    sims = cosine_similarity(q, tfidf_matrix).ravel()
+    return sims
 
-  return sim[0][0]
-
-def get_top5(query : str, docs : list, jobs_df : pd.DataFrame):
-    vectorizer = TfidfVectorizer()
-    # constructs tf idf matrix between query and docs
-    tfidf_mat = vectorizer.fit_transform([query] + docs)
-
-    # tf-idf of q 
-    q = tfidf_mat[0]
-
-    n_docs = tfidf_mat.shape[0]
-    sims = []
-    for i in range(1, n_docs):
-        doc = tfidf_mat[i]
-        sim = cosine_similarity(q, doc)
-        sims.append((sim[0][0], jobs_df.iloc[i-1]['job_title'], jobs_df.iloc[i-1]['client_average_rating'], docs[i - 1]))
-    sims.sort(reverse = True)
-    return sims[:5]
+def get_top5(query: str, docs: list, jobs_df: pd.DataFrame):
+    sims = cosine_sim(query)
+    top_indices = sims.argsort()[-5:][::-1]
+    top_sims = [(sims[i], jobs_df.iloc[i]['job_title'], jobs_df.iloc[i]['client_average_rating'], docs[i])
+                for i in top_indices]
+    return top_sims
 
 # Store json into python dict
 # data = None 
