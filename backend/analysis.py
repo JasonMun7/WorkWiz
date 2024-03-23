@@ -1,21 +1,8 @@
 import os
 import pandas as pd
 import json
-import numpy
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-
-#precompute the inverted index, save in a global variable
-import os
-import pandas as pd
-import json
-import numpy as np
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
-import loader
-
-# Load or create the TF-IDF matrix for the documents
-# This should be done only once, or whenever the documents change
 import pickle
 
 def load_or_create_tfidf_matrix():
