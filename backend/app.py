@@ -38,7 +38,7 @@ def cosine_search(query):
     top_matches = analysis.get_top5(query, jobs_df['job_description'].values.tolist(), jobs_df)
 
     # Create a DataFrame from the top matching jobs
-    top_matches_df = pd.DataFrame(top_matches, columns=['cosine_similarity', 'job_title', 'client_average_rating', 'job_description'])
+    top_matches_df = pd.DataFrame(top_matches, columns=['cosine_similarity', 'job_title', 'client_average_rating', 'job_description', 'tags', 'avg_price', 'currency'])
 
     # Convert the DataFrame to JSON
     top_matches_json = top_matches_df.to_json(orient='records')

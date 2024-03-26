@@ -10,11 +10,11 @@
             <div class="google-colors">
                 <h1 id="google-0-2">Work Wiz</h1>
             </div>
-            <div class="title-description">Instantly discover the necessary skills required for your project</div>
+            <div class="title-description">Find Freelance jobs and Instantly discover the necessary skills required</div>
             <label class="input-container closed " onclick="sendFocus()">
                 <div class="shadow"></div>
                 <div class="center">
-                    <input id="filter-text-val" type="text" class="input" placeholder="Search through numerous jobs/freelancers" onkeyup="filterText()">
+                    <input id="filter-text-val" type="text" class="input" placeholder="Enter a job description" onkeyup="filterText()">
                 </div>
                 <div class="sticks"></div>
             </label>
@@ -26,11 +26,15 @@
 
     <script>
 
-        function answerBoxTemplate(title,titleDesc,rating){
-            return `<div class=''>
+        function answerBoxTemplate(title,titleDesc,rating, list, similarity, avg_price, currency){
+            let tags = list.map(tag => `<span class='tag'>${tag}</span>`).join('');
+            return `<div class='result-box'>
                 <h3 class='job-title'>Job Title: ${title}</h3>
                 <p class='job-desc'>Description: ${titleDesc}</p>
                 <p class='client-average-rating'>Client Average Rating: ${rating}</p>
+                <p class='avg-price'>Average Price: ${avg_price} ${currency}</p>
+                <p class='similarity'>Similarity: ${similarity} %</p>
+                <div class='tags'>Skills:  ${tags}</div>
             </div>`
         }
 
@@ -46,11 +50,16 @@
             .then((data) => data.forEach(row => {
          
                 let tempDiv = document.createElement("div")
-                tempDiv.innerHTML = answerBoxTemplate(row.job_title,row.job_description,row.client_average_rating)
+                tempDiv.innerHTML = answerBoxTemplate(row.job_title,row.job_description,row.client_average_rating, row.tags, (row.cosine_similarity / 1 * 100).toFixed(2), row.avg_price, row.currency)
                 document.getElementById("answer-box").appendChild(tempDiv)
             }));
 
         }
+
+        document.querySelector('.sticks').addEventListener('click', () => {
+            document.getElementById('filter-text-val').value = '';
+            document.getElementById("answer-box").innerHTML = "";
+        });
             
     </script>
 </body>
