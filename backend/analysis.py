@@ -1,45 +1,49 @@
 import os
 import pandas as pd
 import json
+from sklearn.decomposition import TruncatedSVD
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import pickle
 import ast
 
 
-def load_or_create_tfidf_matrix():
+def load_or_create_tfidf_matrix(n_components=100):
     try:
         with open("tfidf_matrix.pickle", "rb") as f:
-            tfidf_matrix, vectorizer = pickle.load(f)
+            tfidf_matrix, vectorizer, svd = pickle.load(f)
     except FileNotFoundError:
         vectorizer = TfidfVectorizer()
         corpus = []
         with open('data/freelancer.json', 'r') as jsonfile:
-          data = json.load(jsonfile)
-          jobs_df = pd.DataFrame(data['jobs'])
-        for jd in jobs_df['job_description']:
-            corpus.append(jd)
+            data = json.load(jsonfile)
+            jobs_df = pd.DataFrame(data['jobs'])
+            for jd in jobs_df['job_description']:
+                corpus.append(jd)
         tfidf_matrix = vectorizer.fit_transform(corpus)
+        
+        # Apply SVD to reduce dimensionality
+        svd = TruncatedSVD(n_components=n_components)
+        tfidf_matrix = svd.fit_transform(tfidf_matrix)
+        
         with open("tfidf_matrix.pickle", "wb") as f:
-            pickle.dump((tfidf_matrix, vectorizer), f)
-    return tfidf_matrix, vectorizer
+            pickle.dump((tfidf_matrix, vectorizer, svd), f)
+    return tfidf_matrix, vectorizer, svd
 
-# Precompute the inverted index, save in a global variable
-tfidf_matrix, vectorizer = load_or_create_tfidf_matrix()
-
-def cosine_sim(query: str):
-    # No need to create a new TfidfVectorizer, just use the precomputed one
+def cosine_sim(query: str, vectorizer, svd):
     q = vectorizer.transform([query])
+    q = svd.transform(q)
     sims = cosine_similarity(q, tfidf_matrix).ravel()
     return sims
 
-def get_top5(query: str, docs: list, jobs_df: pd.DataFrame):
-    sims = cosine_sim(query)
-    top_indices = sims.argsort()[-5:][::-1]
-    top_sims = [(sims[i], jobs_df.iloc[i]['job_title'], jobs_df.iloc[i]['client_average_rating'], docs[i], ast.literal_eval(jobs_df.iloc[i]['tags']), jobs_df.iloc[i]['avg_price'], jobs_df.iloc[i]['currency'])
-                for i in top_indices]
-    return top_sims
+# Precompute the inverted index, save in a global variable
+tfidf_matrix, vectorizer, svd = load_or_create_tfidf_matrix(n_components=100)
 
+def get_top5(query: str, docs: list, jobs_df: pd.DataFrame):
+    sims = cosine_sim(query, vectorizer, svd)
+    top_indices = sims.argsort()[-5:][::-1]
+    top_sims = [(sims[i], jobs_df.iloc[i]['job_title'], jobs_df.iloc[i]['client_average_rating'], docs[i], ast.literal_eval(jobs_df.iloc[i]['tags']), jobs_df.iloc[i]['avg_price'], jobs_df.iloc[i]['currency']) for i in top_indices]
+    return top_sims
 # Store json into python dict
 # data = None 
 # with open('./data/freelancer.json', 'r') as json_file:
