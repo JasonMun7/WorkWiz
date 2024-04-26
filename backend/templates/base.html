@@ -3,52 +3,75 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Kanit&family=Montserrat&family=Open+Sans:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Kanit&family=Montserrat&family=Open+Sans:wght@500&display=swap"
+  rel="stylesheet">
+
 <body>
-    <div class="full-body-container">
-        <div class="hero-container">
-            <div class="top-text">
-                <div class="title-description">
-                    <div class="stack" style="--stacks: 3;">
-                        <span style="--index: 0;">WorkWiz</span>
-                        <span style="--index: 1;">WorkWiz</span>
-                        <span style="--index: 2;">WorkWiz</span>
-                    </div>
-                    <div class="stack" style="--stacks: 3;">
-                        <span style="--index: 0;">Find Your Future</span>
-                        <span style="--index: 1;">Find Your Future</span>
-                        <span style="--index: 2;">Find Your Future</span>
-                    </div>
-                </div>
-                <label class="input-container closed " onclick="sendFocus()">
-                    <div class="shadow"></div>
-                    <div class="search">
-                        <input id="filter-text-val" type="text" class="input" placeholder="Enter a job description" onkeyup="filterText()">
-                    </div>
-                    <div class="sticks"></div>
-                </label>
-            </div>
-            <div class="ball">
-                <span style="--color: #ffffff; --i:18px; --d:2.5s;"></span>
-                <span style="--color: #03a1d9; --i:13px; --d:5s;"></span>
-                <span style="--color: #0044ff; --i:15px; --d:7.5s;"></span>
-                <span style="--color: #000000; --i:20px; --d:10s;"></span>
-            </div>
+  <div class="full-body-container">
+    <div class="hero-container">
+      <div class="top-text">
+        <div class="title-description">
+          <div class="stack" style="--stacks: 3;">
+            <span style="--index: 0;">WorkWiz</span>
+            <span style="--index: 1;">WorkWiz</span>
+            <span style="--index: 2;">WorkWiz</span>
+          </div>
+          <div class="stack" style="--stacks: 3;">
+            <span style="--index: 0;">Find Your Future</span>
+            <span style="--index: 1;">Find Your Future</span>
+            <span style="--index: 2;">Find Your Future</span>
+          </div>
         </div>
-        <div class="spacer">
-
-        </div>
-        <div class="answer-stack">
-            <div id="answer-box"></div>
-        </div>
+        <label class="input-container closed " onclick="sendFocus()">
+          <div class="shadow"></div>
+          <div class="search">
+            <input id="filter-text-val" type="text" class="input" placeholder="Enter a job description"
+              onkeyup="filterText()">
+          </div>
+          <div class="sticks"></div>
+        </label>
+      </div>
+      <div class="ball">
+        <span style="--color: #ffffff; --i:18px; --d:2.5s;"></span>
+        <span style="--color: #03a1d9; --i:13px; --d:5s;"></span>
+        <span style="--color: #0044ff; --i:15px; --d:7.5s;"></span>
+        <span style="--color: #000000; --i:20px; --d:10s;"></span>
+      </div>
     </div>
+    <div class="spacer">
+
+    </div>
+    <div class="answer-stack">
+      <div id="answer-box"></div>
+    </div>
+  </div>
 
 
-    <script>
+  <script>
 
-        function answerBoxTemplate(title,titleDesc,rating, list, similarity, avg_price, currency){
-            let tags = list.map(tag => `<span class='tag'>${tag}</span>`).join('');
-            return `            <div class="wrapper">
+    function answerBoxTemplate(title, titleDesc, rating, list, similarity, avg_price, currency, usd_val) {
+      let tags = list.map(tag => `<span class='tag'>${tag}</span>`).join('');
+      let currencyBox;
+      if (currency == 'USD') {
+        currencyBox = `
+          <div class="priceTag">
+            <span>${currency}</span>${avg_price}
+          </div>
+        `;
+      } else {
+        currencyBox = `
+          <div class="currency-box">
+            <div class="priceTag">
+              <span>${currency}</span>${avg_price}
+            </div>
+            <div> Or </div>
+            <div class="priceTag">
+              <span>USD</span>${usd_val}
+            </div>
+          </div>
+        `;
+      }
+      return `            <div class="wrapper">
 
   
 <div class="overviewInfo">
@@ -111,9 +134,8 @@ xmlns="http://www.w3.org/2000/svg"
   </div>
   
   <div class="checkoutButton">
-    <div class="priceTag">
-      <span>${currency}</span>${avg_price}
-    </div>
+    ${currencyBox}
+    
     <button class="preorder">
       <p>Apply</p>
       <div class="buttonaction">
@@ -136,30 +158,30 @@ xmlns="http://www.w3.org/2000/svg"
 <!-- product specificaiton -->
 
 </div>`
-        }
+    }
 
-        function sendFocus(){
-            document.getElementById('filter-text-val').focus()
-        }
+    function sendFocus() {
+      document.getElementById('filter-text-val').focus()
+    }
 
-        function filterText(){
-            document.getElementById("answer-box").innerHTML = ""
-            console.log(document.getElementById("filter-text-val").value)
-            fetch("/jobs?" + new URLSearchParams({ title: document.getElementById("filter-text-val").value }).toString())
-            .then((response) => response.json())
-            .then((data) => data.forEach(row => {
-         
-                let tempDiv = document.createElement("div")
-                tempDiv.innerHTML = answerBoxTemplate(row.job_title,row.job_description,row.client_average_rating, row.tags, (row.cosine_similarity / 1 * 100).toFixed(2), row.avg_price, row.currency)
-                document.getElementById("answer-box").appendChild(tempDiv)
-            }));
+    function filterText() {
+      document.getElementById("answer-box").innerHTML = ""
+      console.log(document.getElementById("filter-text-val").value)
+      fetch("/jobs?" + new URLSearchParams({ title: document.getElementById("filter-text-val").value }).toString())
+        .then((response) => response.json())
+        .then((data) => data.forEach(row => {
+          console.log(data)
+          let tempDiv = document.createElement("div")
+          tempDiv.innerHTML = answerBoxTemplate(row.job_title, row.job_description, row.client_average_rating, row.tags, (row.cosine_similarity / 1 * 100).toFixed(2), row.avg_price, row.currency, (row.usd_val).toFixed(2))
+          document.getElementById("answer-box").appendChild(tempDiv)
+        }));
 
-        }
+    }
 
-        document.querySelector('.sticks').addEventListener('click', () => {
-            document.getElementById('filter-text-val').value = '';
-            document.getElementById("answer-box").innerHTML = "";
-        });
-            
-    </script>
+    document.querySelector('.sticks').addEventListener('click', () => {
+      document.getElementById('filter-text-val').value = '';
+      document.getElementById("answer-box").innerHTML = "";
+    });
+
+  </script>
 </body>

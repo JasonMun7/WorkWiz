@@ -7,6 +7,7 @@ import os
 import pandas as pd
 import sklearn.feature_extraction 
 import numpy
+from currency_converter import CurrencyConverter
 
 # Open the CSV file
 with open('data/freelancer_job_postings.csv', 'r') as csvfile:
@@ -24,19 +25,30 @@ with open('data/freelancer_job_postings.csv', 'r') as csvfile:
 output = {"jobs": []}
 
 # Open the JSON file for writing
-with open('data/freelancer.json', 'w') as jsonfile:
+# path = 'data/freelancer.json'
+path = 'data/freelancer_with_USD.json'
+with open(path, 'w') as jsonfile:
     i = 0
+    c = CurrencyConverter()
     for entry in data:
         json_entry = {fieldname: entry[fieldname] for fieldname in fieldnames}
+        json_entry['usd_val'] = 0
         json_entry["projectId"] = i
+        usd_val = c.convert(json_entry['avg_price'], json_entry['currency'], 'USD')
+        json_entry['usd_val'] = usd_val
         i += 1
         output["jobs"].append(json_entry)
 
     json.dump(output, jsonfile, indent=4)
 
-with open('data/freelancer.json', 'r') as jsonfile:
+with open(path, 'r') as jsonfile:
     data = json.load(jsonfile)
     jobs_df = pd.DataFrame(data['jobs'])
+
+
+def convert_to_usd():
+    pass
+
 
 #Builds and returns an inverted index 
 def createInvIndex():

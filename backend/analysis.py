@@ -42,7 +42,7 @@ tfidf_matrix, vectorizer, svd = load_or_create_tfidf_matrix(n_components=100)
 def get_top5(query: str, docs: list, jobs_df: pd.DataFrame):
     sims = cosine_sim(query, vectorizer, svd)
     top_indices = sims.argsort()[-5:][::-1]
-    top_sims = [(sims[i], jobs_df.iloc[i]['job_title'], jobs_df.iloc[i]['client_average_rating'], docs[i], ast.literal_eval(jobs_df.iloc[i]['tags']), jobs_df.iloc[i]['avg_price'], jobs_df.iloc[i]['currency']) for i in top_indices]
+    top_sims = [(sims[i], jobs_df.iloc[i]['job_title'], jobs_df.iloc[i]['client_average_rating'], docs[i], ast.literal_eval(jobs_df.iloc[i]['tags']), jobs_df.iloc[i]['avg_price'], jobs_df.iloc[i]['currency'], jobs_df.iloc[i]['usd_val']) for i in top_indices]
     return top_sims
 # Store json into python dict
 # data = None 
