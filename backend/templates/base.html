@@ -163,7 +163,7 @@
 
 
     function answerBoxTemplate(title, titleDesc, rating, list, similarity, avg_price, currency, usd_val) {
-      let tags = list.map(tag => `<span class='tag'>${tag}</span>`).join('');
+      let tags = list.map(tag => `<span class='tag'>${tag}</span>`).join(', '); // Joining tags with commas
       let currencyBox;
       if (currency == 'USD') {
         currencyBox = `
