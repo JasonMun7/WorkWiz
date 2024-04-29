@@ -5,6 +5,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Kanit&family=Montserrat&family=Open+Sans:wght@500&display=swap"
   rel="stylesheet">
+  
 
 <body>
   <div class="full-body-container">
@@ -22,160 +23,223 @@
             <span style="--index: 2;">Find Your Future</span>
           </div>
         </div>
+        <!-- *BEGIN of Search Bar -->
         <label class="input-container closed " onclick="sendFocus()">
           <div class="shadow"></div>
           <div class="search">
             <input id="filter-text-val" type="text" class="input" placeholder="Enter a job description"
-              onkeyup="filterText()">
+            onkeydown="filterText(event)">
           </div>
           <div class="sticks"></div>
         </label>
+        <!-- !END of Search Bar -->
       </div>
+      <!-- *BEGIN Ball -->
       <div class="ball">
         <span style="--color: #ffffff; --i:18px; --d:2.5s;"></span>
         <span style="--color: #03a1d9; --i:13px; --d:5s;"></span>
         <span style="--color: #0044ff; --i:15px; --d:7.5s;"></span>
         <span style="--color: #000000; --i:20px; --d:10s;"></span>
       </div>
+      <!-- !END of Ball -->
     </div>
     <div class="spacer">
 
     </div>
+
+    <!-- *BEGIN of Job Cards -->
     <div class="answer-stack">
       <div id="answer-box"></div>
     </div>
+    <!-- !END of Job Cards -->
   </div>
-
-
+  <!-- *Modal Structure -->
+  <div class="overlay" id="application-modal">
+    <div class="modal">
+      <div class="modal-inner">
+        <a href="#" class="modal-close" onclick="closeModal(event)">X</a>
+        <h3 id="modal-title">Job Application</h3>
+          <div class="flex-wrapper">
+            <h2>Similarity Score:</h3>
+            <div class="single-chart">
+              <svg viewBox="0 0 36 36" class="circular-chart blue">
+                <path class="circle-bg"
+                  d="M18 2.0845
+                    a 15.9155 15.9155 0 0 1 0 31.831
+                    a 15.9155 15.9155 0 0 1 0 -31.831"
+                />
+                <path class="circle"
+                  stroke-dasharray="60, 100"
+                  d="M18 2.0845
+                    a 15.9155 15.9155 0 0 1 0 31.831
+                    a 15.9155 15.9155 0 0 1 0 -31.831"
+                />
+                <text x="18" y="20.35" class="percentage">60%</text>
+              </svg>
+            </div>
+        </div>
+        <p id="modal-content">Content goes here...</p>
+        <!-- <button id="modal-tags"class="btn-hover color">BUTTON</button> -->
+      </div>
+    </div>
+  </div>
+  
+  <!-- ! End modal Structure -->
+  
   <script>
-
     function answerBoxTemplate(title, titleDesc, rating, list, similarity, avg_price, currency, usd_val) {
-      let tags = list.map(tag => `<span class='tag'>${tag}</span>`).join('');
+      let tags = list.slice(0, 4).map(tag => capitalizeFirstLetter(tag));
+      let newTitleDesc = capitalizeFirstLetter(truncateString(titleDesc, 40)); 
+      let newTitle = capitalizeFirstLetter(truncateString(title, 30)); 
       let currencyBox;
       if (currency == 'USD') {
         currencyBox = `
           <div class="priceTag">
-            <span>${currency}</span>${avg_price}
+            <span>${currency}</span>$${avg_price}
           </div>
         `;
       } else {
         currencyBox = `
           <div class="currency-box">
             <div class="priceTag">
-              <span>${currency}</span>${avg_price}
-            </div>
-            <div> Or </div>
-            <div class="priceTag">
-              <span>USD</span>${usd_val}
+              <span>USD</span>$${usd_val}
             </div>
           </div>
         `;
       }
-      return `            <div class="wrapper">
+      return `<div class="wrapper">
+                <div class="overviewInfo">
+                  <div class="productinfo">
+                    <div class="grouptext">
+                      <h3>SIMILARITY</h3>
+                      <p>${similarity}</p>
+                    </div>
+                    <div class="grouptext">
+                      <h3>RATING</h3>
+                      <p>${rating}</p>
+                    </div>
+                    <div class="grouptext">
+                      <h3>PRICE</h3>
+                      <p>${avg_price} ${currency}</p>
+                    </div>
+                    
+                    
+                    <div class="productImage">
+                      <img class="product-image" src="../static/images/logo.jpg" alt="This is the job Logo">
+                    </div>
+                    
+                </div>
+                  
+                </div> 
+                <!-- overview info -->
 
-  
-<div class="overviewInfo">
-  <div class="actions">
-    <div class="backbutton ">
- <svg
-width="24"
-height="24"
-viewBox="0 0 24 24"
-fill="none"
-xmlns="http://www.w3.org/2000/svg"
->
-<path
-  d="M1.02698 11.9929L5.26242 16.2426L6.67902 14.8308L4.85766 13.0033L22.9731 13.0012L22.9728 11.0012L4.85309 11.0033L6.6886 9.17398L5.27677 7.75739L1.02698 11.9929Z"
-  fill="currentColor"
-/>
-</svg>
-    </div>
+                <div class="productSpecifications">
+                  <h1> ${newTitle} </h1>
+                  <p> ${newTitleDesc} </p>
+                  
+                  <div class="productFeatures">
+                    ${tags.map(tag => `    
+                    <div class="feature">
+                      <div class="featureIcon">
+                      </div>
+                      <div class="featureText">
+                        <p> <strong>${tag}</strong></p>
+                      </div>
+                    </div>`).join('')}
+                    
+                  </div>
+                  
+                  <div class="checkoutButton">
+                    ${currencyBox}
+                    
+                    <button class="preorder" onclick="openModal('${title}', '${titleDesc}', ${similarity})">
+                      <p>INFO</p>
+                      <div class="buttonaction">
+                      <svg
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        >
+                        <path
+                          d="M23.0677 11.9929L18.818 7.75739L17.4061 9.17398L19.2415 11.0032L0.932469 11.0012L0.932251 13.0012L19.2369 13.0032L17.4155 14.8308L18.8321 16.2426L23.0677 11.9929Z"
+                          fill="currentColor"
+                        />
+                      </svg>
+                      </div>
+                    </button> 
+                  </div>
+                </div>
+                <!-- product specificaiton -->
 
-  </div>
-  
-  <div class="productinfo">
-    <div class="grouptext">
-       <h3>SIMILARITY</h3>
-       <p>${similarity}</p>
-    </div>
-    <div class="grouptext">
-       <h3>RATING</h3>
-       <p>${rating}</p>
-    </div>
-    <div class="grouptext">
-       <h3>PRICE</h3>
-       <p>${avg_price} ${currency}</p>
-    </div>
-    
-    
-    <div class="productImage">
-      <img class="product-image" src="../static/images/logo.jpg" alt="This is the job Logo">
-    </div>
-    
-</div>
-   
-</div> 
-<!-- overview info -->
+                </div>`
+    }
 
-<div class="productSpecifications">
-  <h1> ${title} </h1>
-  <p> ${titleDesc} </p>
-  
-  <div class="productFeatures">
-    <div class="feature">
-      <div class="featureIcon">
-      </div>
-      <div class="featureText">
-        <p> <strong>Skills</strong></p>
-        <p>${tags}</p>
-      </div>
-    </div>
-    
-  </div>
-  
-  <div class="checkoutButton">
-    ${currencyBox}
-    
-    <button class="preorder">
-      <p>Apply</p>
-      <div class="buttonaction">
-       <svg
-width="24"
-height="24"
-viewBox="0 0 24 24"
-fill="none"
-xmlns="http://www.w3.org/2000/svg"
->
-<path
-  d="M23.0677 11.9929L18.818 7.75739L17.4061 9.17398L19.2415 11.0032L0.932469 11.0012L0.932251 13.0012L19.2369 13.0032L17.4155 14.8308L18.8321 16.2426L23.0677 11.9929Z"
-  fill="currentColor"
-/>
-</svg>
-      </div>
-    </button> 
-  </div>
-</div>
-<!-- product specificaiton -->
+    function capitalizeFirstLetter(string) {
+      return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+    }
 
-</div>`
+    function truncateString(str, maxLength) {
+      if (str.length > maxLength) {
+        return str.substring(0, maxLength - 3) + '...';
+      }
+      return str;
+    }
+
+    function scrollToAnswerStack() {
+      const answerStack = document.querySelector('.answer-stack');
+      if (answerStack) {
+        answerStack.scrollIntoView({ behavior: 'smooth' });
+      }
     }
 
     function sendFocus() {
       document.getElementById('filter-text-val').focus()
     }
 
-    function filterText() {
-      document.getElementById("answer-box").innerHTML = ""
-      console.log(document.getElementById("filter-text-val").value)
-      fetch("/jobs?" + new URLSearchParams({ title: document.getElementById("filter-text-val").value }).toString())
-        .then((response) => response.json())
-        .then((data) => data.forEach(row => {
-          console.log(data)
-          let tempDiv = document.createElement("div")
-          tempDiv.innerHTML = answerBoxTemplate(row.job_title, row.job_description, row.client_average_rating, row.tags, (row.cosine_similarity / 1 * 100).toFixed(2), row.avg_price, row.currency, (row.usd_val).toFixed(2))
-          document.getElementById("answer-box").appendChild(tempDiv)
-        }));
+    function openModal(title, description, similarity) {
+      let newTitle = capitalizeFirstLetter(title)
+      let newDescription = capitalizeFirstLetter(description)
+      let rounded = Math.round(similarity)
+      document.getElementById('modal-title').innerText = `${newTitle}`;
+      document.getElementById('modal-content').innerText = newDescription;
+      document.getElementById('application-modal').style.display = 'block';
+      document.querySelector('.modal').classList.add('show');
 
+      const percentageCircle = document.querySelector('.circular-chart .circle');
+      const percentageText = document.querySelector('.circular-chart .percentage');
+      const circleLength = 100;
+      const filledLength = (similarity / 100) * circleLength;
+      percentageCircle.setAttribute('stroke-dasharray', `${filledLength}, 100`);
+      percentageText.textContent = `${rounded}%`;
+    }
+
+    function closeModal(event) {
+      event.preventDefault();
+      document.getElementById('application-modal').style.display = 'none';
+      document.querySelector('.modal').classList.remove('show');
+    }
+
+
+
+    function filterText(event) {
+      if (event.keyCode === 13) {
+        document.getElementById("answer-box").innerHTML = "";
+        fetch("/jobs?" + new URLSearchParams({ title: document.getElementById("filter-text-val").value }).toString())
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.length > 0) {
+              document.querySelector('.answer-stack').style.display = 'block';
+              data.forEach(row => {
+                let tempDiv = document.createElement("div");
+                tempDiv.innerHTML = answerBoxTemplate(row.job_title, row.job_description, row.client_average_rating, row.tags, (row.cosine_similarity / 1 * 100).toFixed(2), row.avg_price, row.currency, (row.usd_val).toFixed(2));
+                document.getElementById("answer-box").appendChild(tempDiv);
+              });
+              scrollToAnswerStack(); 
+            }
+          });
+      }
     }
 
     document.querySelector('.sticks').addEventListener('click', () => {
