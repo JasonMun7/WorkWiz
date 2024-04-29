@@ -6,6 +6,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Kanit&family=Montserrat&family=Open+Sans:wght@500&display=swap"
   rel="stylesheet">
 
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
 <body>
   <div class="full-body-container">
     <div class="hero-container">
@@ -46,8 +50,117 @@
     </div>
   </div>
 
-
   <script>
+    
+    $(document).ready(function() {
+      var jobTitles = [
+        "Software Engineer",
+        "Data Scientist",
+        "Web Developer",
+        "Network Engineer",
+        "Systems Administrator",
+        "Cybersecurity Analyst",
+        "IT Support Specialist",
+        "Database Administrator",
+        "DevOps Engineer",
+        "Cloud Solutions Architect",
+        "UX/UI Designer",
+        "Frontend Developer",
+        "Backend Developer",
+        "Full Stack Developer",
+        "Mobile App Developer",
+        "QA Engineer",
+        "Business Analyst",
+        "Project Manager (Tech)",
+        "Technical Writer",
+        "IT Consultant",
+        "Machine Learning Engineer",
+        "Artificial Intelligence (AI) Specialist",
+        "Robotics Engineer",
+        "Blockchain Developer",
+        "Game Developer",
+        "IT Manager",
+        "Network Security Engineer",
+        "Systems Analyst",
+        "Computer Hardware Engineer",
+        "Software Development Manager",
+        "IT Auditor",
+        "Data Engineer",
+        "Cloud Engineer",
+        "Systems Integrator",
+        "User Researcher",
+        "Information Security Analyst",
+        "Technology Evangelist",
+        "Digital Marketing Analyst (Tech)",
+        "IT Trainer",
+        "Technical Sales Engineer",
+        "Data Analyst (Tech)",
+        "Automation Engineer",
+        "IT Business Analyst",
+        "Systems Engineer",
+        "DevOps Specialist",
+        "Network Administrator",
+        "Solutions Architect",
+        "Penetration Tester (Ethical Hacker)",
+        "IT Compliance Analyst",
+        "Technology Consultant",
+        "Data Architect",
+        "Computer Scientist",
+        "Embedded Systems Engineer",
+        "Network Architect",
+        "Systems Designer",
+        "Cloud Solutions Engineer",
+        "Software Quality Assurance (SQA) Engineer",
+        "IT Security Consultant",
+        "Network Operations Center (NOC) Technician",
+        "Incident Response Analyst",
+        "Mobile Application Architect",
+        "IT Project Coordinator",
+        "IT Procurement Specialist",
+        "Platform Engineer",
+        "UI/UX Researcher",
+        "Data Visualization Specialist",
+        "Technical Support Engineer",
+        "Integration Engineer",
+        "Network Operations Engineer",
+        "Mobile Solutions Architect",
+        "IT Risk Manager",
+        "Cybersecurity Engineer",
+        "IT Compliance Manager",
+        "Cloud Security Architect",
+        "Data Mining Specialist",
+        "Systems Security Analyst",
+        "Technical Product Manager",
+        "Network Support Technician",
+        "IT Systems Engineer",
+        "Platform Operations Engineer",
+        "Mobile Solutions Developer",
+        "IT Business Continuity Manager",
+        "Data Governance Specialist",
+        "Network Operations Manager",
+        "IT Solutions Architect",
+        "Cloud Operations Engineer",
+        "IT Security Analyst",
+        "Technology Risk Analyst",
+        "Cybersecurity Specialist",
+        "IT Change Manager",
+        "IT Service Delivery Manager",
+        "AI Product Manager",
+        "Blockchain Solutions Architect",
+        "Data Science Manager",
+        "IT Operations Manager",
+        "Cloud Services Manager",
+        "Digital Transformation Consultant",
+        "IT Asset Manager",
+        "Cybersecurity Manager",
+        "Technology Strategy Consultant"
+      ];
+
+        $("#filter-text-val").autocomplete({
+            source: jobTitles
+        });
+    });
+
 
     function answerBoxTemplate(title, titleDesc, rating, list, similarity, avg_price, currency, usd_val) {
       let tags = list.map(tag => `<span class='tag'>${tag}</span>`).join('');

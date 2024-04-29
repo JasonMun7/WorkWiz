@@ -677,3 +677,28 @@ button.preorder {
     transform: rotate(-70deg) translate(10px, 66px);
   }
 }
+
+.ui-autocomplete {
+  max-height: 200px;
+  overflow-y: hidden; 
+  z-index: 1000;
+  border: 5px solid #ffffff; 
+  background-color: transparent;
+  padding: 5px 0; 
+  max-width: 500px;
+  border-bottom-left-radius: 25px;
+  border-bottom-right-radius: 25px;
+}
+
+.ui-menu-item {
+  padding: 8px 12px; 
+  cursor: pointer;
+}
+
+.ui-menu-item:hover {
+  background-color: rgba(255, 255, 255, .2);
+}
+
+.ui-helper-hidden-accessible{
+  display: none;
+}
