@@ -1,4 +1,5 @@
 @import 'https://fonts.googleapis.com/css?family=Catamaran';
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap');
 
 html,
 body {
@@ -7,7 +8,8 @@ body {
   margin: 0;
   padding: 0;
   color: var(--text-color);
-  font-family: 'Catamaran', sans-serif;
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
   --height: 50;
   --width: 500;
   --border: 5;
@@ -15,7 +17,15 @@ body {
   --ease: cubic-bezier(.85, .01, .4, .97);
   --color-bk: rgba(0, 0, 0, 0.5);
   color: var(--text-color);
-
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+:root {
+  --bg-shape-color: linear-gradient(120deg, #343A4F, #0F1620);
+  --lightblue: #3D9DEA;
+  --darkblue: #4A4EEE;
+  --text-color: #D5E1EF;
 }
 
 ::placeholder {
@@ -179,7 +189,6 @@ body {
 }
 
 .hero-container {
-  width: 100vw;
   height: 100vh;
   display: flex;
   align-items: center;
@@ -194,18 +203,19 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'Roboto', sans-serif;
   color: rgb(255 255 255);
   font-weight: bold;
 }
 
 
+/* !Begin Hero Component */
 .ball {
   position: relative;
   width: 150px;
   height: 150px;
-  margin-right: 8rem;
-  margin-top: -6rem;
+  margin-right: 15rem;
+  margin-top: -10rem;
 }
 
 .ball span {
@@ -234,7 +244,10 @@ body {
     transform: rotate(360deg);
   }
 }
+/* !End Hero Component */
 
+
+/* !Begin Hero Text Styling */
 .stack {
   color: rgb(255 255 255);
   display: grid;
@@ -304,21 +317,7 @@ body {
     transform: none;
   }
 }
-
-.input-box {
-  border-radius: 50px;
-  border: 1px solid black;
-  display: flex;
-  align-items: center;
-  margin-top: 10px;
-  padding: 12px;
-  width: 600px;
-}
-
-.input-box img {
-  height: 20px;
-  width: 20px;
-}
+/* !End of Hero Text Styling */
 
 .top-text {
   display: flex;
@@ -327,29 +326,20 @@ body {
   margin-top: 10px;
 }
 
-
-.input-box input {
-  width: 100%;
-  margin-left: 10px;
-  font-size: 16px;
-  border: none;
-  outline: 0;
-}
-
 .answer-stack {
   background-image: url("./images/background3.jpg");
-  width: 100%;
-  height: auto;
   background-size: cover;
+  display: none; 
 }
 
 #answer-box {
-  width: 700px;
+  width: 100%;
   margin-top: 50px;
   display: flex;
   flex-direction: row;
-  gap: 10px;
-  /* Add space between items */
+  justify-content: space-evenly;
+  gap: 50px;
+  flex-wrap: wrap; 
 }
 
 .job-title {
@@ -365,105 +355,23 @@ body {
   flex-direction: column;
 }
 
-.result-box {
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  margin-bottom: 20px;
-  width: 100%;
-  max-width: 700px;
-  display: flex;
-  flex-direction: column;
-  transition: all 0.3s ease;
-}
-
-.result-box:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.result-box .job-title {
-  font-size: 24px;
-  margin-bottom: 10px;
-  color: #333;
-}
-
-.result-box .job-desc {
-  font-size: 16px;
-  margin-bottom: 10px;
-  color: #555;
-}
-
-.result-box .client-average-rating {
-  font-size: 14px;
-  color: #555;
-  margin-bottom: 10px;
-}
-
-.result-box .similarity {
-  font-size: 14px;
-  color: #555;
-  margin-bottom: 10px;
-}
-
-.result-box .avg-price {
-  color: #555;
-  font-size: 14px;
-  margin-bottom: 10px;
-}
-
-.result-box .tags {
-  display: flex;
-  flex-wrap: wrap;
-  margin-top: 10px;
-}
-
-.result-box .tag {
-  background-color: #f0f0f0;
-  color: #333;
-  border-radius: 5px;
-  padding: 5px 10px;
-  margin-right: 5px;
-  margin-bottom: 5px;
-  font-size: 12px;
-  transition: all 0.3s ease;
-}
-
-.result-box .tag:hover {
-  background-color: #ddd;
-  color: #222;
-  cursor: pointer;
-}
 
 
 
 
-/* ?Card Component Syling*/
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap');
-
-*,
-button,
-input {
-  margin: 0px;
-  padding: 0px;
-  box-sizing: border-box;
-
-  font-family: 'Roboto', sans-serif;
-}
-
-:root {
-  --bg-shape-color: linear-gradient(120deg, #343A4F, #0F1620);
-  --lightblue: #3D9DEA;
-  --darkblue: #4A4EEE;
-  --text-color: #D5E1EF;
-}
-
+/* !Begin Card Component Syling*/
 .wrapper {
   width: 350px;
   border-radius: 40px;
   background-image: var(--bg-shape-color);
   overflow: hidden;
+  transition: transform 0.3s ease-in-out; /* Smooth transition for scaling */
+}
+
+
+.wrapper:hover {
+  transform: scale(1.025); /* Scale the card on hover */
+  z-index: 10; /* Ensure the scaled element is above others */
 }
 
 .overviewInfo,
@@ -473,40 +381,6 @@ input {
 
 .overviewInfo {
   background-image: linear-gradient(176deg, var(--lightblue), var(--darkblue));
-}
-
-.actions {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 32px;
-
-  .cartbutton {
-    position: relative;
-  }
-
-  .cartbutton::after {
-    content: '';
-    display: block;
-    width: 8px;
-    height: 8px;
-    background-image: linear-gradient(90deg, #489be2, #0f629c);
-    border-radius: 50%;
-    position: absolute;
-    top: 11px;
-    right: 8px;
-  }
-
-  .cartbutton svg {
-    color: #ababab73;
-  }
-
-  .backbutton,
-  .cartbutton {
-
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-  }
 }
 
 .neurobutton {
@@ -677,6 +551,157 @@ button.preorder {
     transform: rotate(-70deg) translate(10px, 66px);
   }
 }
+/* !End of Card Styling */
+
+/* !Begin of Modal Styling */
+.overlay {
+  display: none; /* Initially hidden */
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: transparent;
+}
+
+.modal {
+  background: #343A4F;
+  position: fixed;
+  right: 0; /* Align to the left */
+  top: 0; /* Align to the top */
+  width: 600px; /* Width of the modal */
+  height: 100%; /* Full height of the viewport */
+  border-right: 1px solid #ccc; /* Border to separate from the rest of the page */
+  box-shadow: 2px 0 5px rgba(0,0,0,0.5); /* Shadow on the right side */
+  overflow-y: auto; /* Allows scrolling */
+  z-index: 1051; /* Higher than the overlay */
+  transform: translateX(0%); /* Start offscreen to the right */
+  transition: transform 0.3s ease-out; /* Smooth transition for sliding in and out */
+}
+
+.modal-inner {
+  padding: 20px;
+}
+
+.modal-close {
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  color:white;
+  margin:10px 10px 0 0;
+  font-size:20px;
+  font-weight:bold;
+  text-decoration:none;
+  text-align:center;
+  line-height:20px;
+  height:30px;
+  width:30px;
+}
+
+.modal.show {
+  transform: translateX(0); /* Move into view */
+}
+
+
+.modal-inner h3 {
+  display:block;
+  text-align:center;
+  font-size:35px;
+  padding:20px 20px 10px 20px;
+}
+
+.modal-inner h2{
+  display:block;
+  text-align:center;
+  font-size:25px; 
+}
+/* !End of Modal Styling */
+
+/* !Begin Percentage Wheel */
+.flex-wrapper {
+  display: flex;
+  flex-flow: row;
+  justify-content: center;
+  align-items: center;}
+
+.single-chart {
+  width: 33%;
+  justify-content: space-around ;
+}
+
+.circular-chart {
+  display: block;
+  margin: 10px auto;
+  max-width: 80%;
+  max-height: 250px;
+}
+
+.circle-bg {
+  fill: none;
+  stroke: #575c6e;
+  stroke-width: 3.8;
+}
+
+.circle {
+  fill: none;
+  stroke-width: 2.8;
+  stroke-linecap: round;
+  animation: progress 1s ease-out forwards;
+}
+
+@keyframes progress {
+  0% {
+    stroke-dasharray: 0 100;
+  }
+}
+
+.circular-chart.blue .circle {
+  stroke: #04befe;
+}
+
+.percentage {
+  fill: white;
+  font-family: sans-serif;
+  font-size: 0.5em;
+  text-anchor: middle;
+}
+/* !End of percentage Wheel */
+
+/* !Begin Tags styling*/
+.buttons {
+  text-align: center;
+  width: auto; 
+}
+
+.btn-hover {
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  padding: 10px; 
+  text-align:center;
+  border: none;
+  background-size: 300% 100%;
+  border-radius: 50px;
+  -o-transition: all .4s ease-in-out;
+  -webkit-transition: all .4s ease-in-out;
+  transition: all .4s ease-in-out;
+}
+
+.btn-hover:hover {
+  background-position: 100% 0;
+  -o-transition: all .4s ease-in-out;
+  -webkit-transition: all .4s ease-in-out;
+  transition: all .4s ease-in-out;
+}
+
+.btn-hover:focus {
+  outline: none;
+}
+.btn-hover.color {
+  background-image: linear-gradient(to right, #25aae1, #4481eb, #04befe, #3f86ed);
+  box-shadow: 0 4px 15px 0 rgba(65, 132, 234, 0.75);
+}
+/* !End of Tags styling */
 
 .ui-autocomplete {
   max-height: 200px;
