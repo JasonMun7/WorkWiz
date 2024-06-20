@@ -1,7 +1,4 @@
-# Work Wiz
-
-
-🔍 Work Wiz 🌟
+# 🔍 Work Wiz 🌟
 
 🚀 Find Your Perfect Job Match! 💼✨
 
